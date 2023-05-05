@@ -4,6 +4,7 @@ import { ConnectionRefusedError,UniqueConstraintError,ValidationError} from 'seq
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as makeId }from 'uuid';
+import User from "../models/User";
 
 
 class AuthController {
@@ -37,7 +38,6 @@ class AuthController {
                }
 
                res.status(200).json({data: data});
-
                
           } catch (error: unknown) {
 
@@ -68,13 +68,19 @@ class AuthController {
                     password: hashPassword
                } 
 
-               console.log(newUser);
+               console.log(newUser);  
+              try {
 
-               // const user = await User.create(newUser);
+               const user = await User.create(newUser);
+               
 
-               // if(!user){
-               //      return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
-               // }
+               if(!user){
+                    return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
+               }
+               
+              } catch (error) {
+                    console.log("Aqui:"+error);
+              }
 
           return res.status(201).json({data:newUser})
                

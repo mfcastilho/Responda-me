@@ -2,40 +2,12 @@ import {Model, DataTypes } from "sequelize";
 
 
 export class Answer extends Model {
-     private id!: string;
-     private ask!: string;
-     private userId!: string;
+     public id!: string;
+     public answer!: string;
+     public vote!: number;
+     public surveyId!: string;
 
-     /* Getters */
-     public getId(): string {
-          return this.id;
-     }
-
-     public getName(): string {
-          return this.ask;
-     }
-
-     public getEmail(): string {
-          return this.userId;
-     }
-
-
-     /* Setters */
-     public setId(id: string):void {
-          this.id = id;
-     }
-
-     public setName(ask: string):void {
-          this.ask = ask;
-     }
-
-     public setEmail(userId: string):void {
-          this.userId = userId;
-     }
-
-     public static associate(models: any) {
-        this.belongsTo(models.User);
-    }
+     
 
      public static initModel(sequelize: any) {
           return Answer.init({
@@ -64,3 +36,5 @@ export class Answer extends Model {
         });
      }   
 }
+
+export default Answer;
