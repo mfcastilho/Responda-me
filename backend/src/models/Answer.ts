@@ -1,7 +1,7 @@
 import {Model, DataTypes } from "sequelize";
 
 
-export class Survey extends Model {
+export class Answer extends Model {
      private id!: string;
      private ask!: string;
      private userId!: string;
@@ -11,7 +11,7 @@ export class Survey extends Model {
           return this.id;
      }
 
-     public getAsk(): string {
+     public getName(): string {
           return this.ask;
      }
 
@@ -38,23 +38,27 @@ export class Survey extends Model {
     }
 
      public static initModel(sequelize: any) {
-        return Survey.init({
+          return Answer.init({
                id: {
                     type: DataTypes.UUID,
                     defaultValue: DataTypes.UUIDV4,
                     primaryKey: true,
                     allowNull: false
-               },
-               ask: {
+               },  
+               answer: {
                     type: DataTypes.STRING,
                     allowNull: false,
                },
-               userId: {
-                    type: DataTypes.UUID,
+               vote: {
+                    type: DataTypes.INTEGER,
                     allowNull: false,
+               },
+               surveyId: {
+                    type: DataTypes.UUID,
+                    allowNull: false,                   
                }
         }, {
-            tableName: "surveys",
+            tableName: "answers",
             timestamps: true,
             sequelize: sequelize
         });

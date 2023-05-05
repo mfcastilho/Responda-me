@@ -51,7 +51,8 @@ export class User extends Model {
      public static initModel(sequelize: any) {
         return User.init({
             id: {
-                type: DataTypes.STRING,
+               type: DataTypes.UUID,
+               defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
                 allowNull: false
             },
