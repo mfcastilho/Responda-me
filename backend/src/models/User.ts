@@ -1,5 +1,7 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
+import Survey from "./Survey";
+
 
 class User extends Model{
 
@@ -27,5 +29,6 @@ export default User.init({
      tableName: "users",
      timestamps: true,
      sequelize:sequelize
-})
+});
 
+User.hasMany(Survey, { foreignKey: "userId" });

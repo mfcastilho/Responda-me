@@ -17,7 +17,7 @@ class AuthController {
      //      this.password = password;
      // }
 
-     async login(req: Request, res:Response){
+     public async login(req: Request, res:Response){
 
           try {
 
@@ -54,12 +54,20 @@ class AuthController {
 
      }
 
-     async storeUser(req: Request, res:Response){
+     public async storeUser(req: Request, res:Response){
           try {
 
                const {name, email, password} = req.body;
  
                const hashPassword = bcrypt.hashSync(password, 10);
+
+               const verifyIfUserExists = await User.findOne({
+                    where: {email: email}
+               })
+
+               if(verifyIfUserExists){
+                    return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
+               }
 
                const newUser = {
                     id: makeId(),
@@ -68,21 +76,9 @@ class AuthController {
                     password: hashPassword
                } 
 
-               console.log(newUser);  
-              try {
-
-               const user = await User.create(newUser);
-               
-
-               if(!user){
-                    return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
-               }
-               
-              } catch (error) {
-                    console.log("Aqui:"+error);
-              }
-
-          return res.status(201).json({data:newUser})
+               await User.create(newUser);
+          
+               return res.status(201).json({data:newUser});
                
           } catch (error: unknown) {
                if(error instanceof ConnectionRefusedError){

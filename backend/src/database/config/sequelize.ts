@@ -4,9 +4,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const port = Number(process.env.DB_PORT)
-
-
-
 const dialect:any = String(process.env.DB_DIALECT)
 
 export const sequelize = new Sequelize({
