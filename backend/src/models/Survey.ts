@@ -1,6 +1,8 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
 import User from "./User";
+import SurveyOption from "./SurveyOption";
+import SurveyResultWinner from "./SurveyResultWinner";
 
 
 class Survey extends Model{
@@ -28,9 +30,10 @@ export default Survey.init({
      sequelize: sequelize
 });
 
-// Survey.belongsTo(User, {
-//      foreignKey:"userId",
-//      as: "user"
-// })
+Survey.hasMany(SurveyOption, {
+     foreignKey:"userId",
+     as: "user"
+});
+Survey.hasOne(SurveyResultWinner);
 
 
