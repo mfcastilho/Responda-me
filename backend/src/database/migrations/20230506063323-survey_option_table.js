@@ -2,18 +2,18 @@ module.exports = {
      up: async (queryInterface, Sequelize) => {
        return queryInterface.sequelize.transaction((t) => {
          return Promise.all([
-               queryInterface.createTable('answers', {
+               queryInterface.createTable('survey_option', {
                     id: {
                          type: Sequelize.UUID,
                          allowNull: false,
                          primaryKey: true,
                          defaultValue: Sequelize.literal('uuid_generate_v4()'),
                     },
-                    answer: {
+                    surveyAnswerOption: {
                          type: Sequelize.STRING,
                          allowNull: false,
                     },
-                    votes: {
+                    surveyAnswerOptionNumber: {
                          type: Sequelize.INTEGER,
                          allowNull: false,
                     },
@@ -40,7 +40,7 @@ module.exports = {
    
      down: async (queryInterface, Sequelize) => {
        return queryInterface.sequelize.transaction((t) => {
-         return queryInterface.dropTable('answers', { transaction: t });
+         return queryInterface.dropTable('survey_option', { transaction: t });
        });
      }
    };

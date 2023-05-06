@@ -16,6 +16,7 @@ export default class SurveyController{
                     ask: ask,
                     userId: userId
                }
+               
 
                res.status(200).json(newSurvey);
                

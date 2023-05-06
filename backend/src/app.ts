@@ -17,8 +17,8 @@ app.use(express.json());
 
 
 /* -- Rotas -- */
-app.use("/api/v1/",authRoutes);
-app.use("/api/v1/",surveyRouters);
+app.use("/api/v1/", authRoutes);
+app.use("/api/v1/", surveyRouters);
 
 
 

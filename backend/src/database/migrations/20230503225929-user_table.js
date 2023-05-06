@@ -3,7 +3,7 @@ module.exports = {
        return queryInterface.sequelize.transaction((t) => {
          return Promise.all([
            queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";', { transaction: t }),
-           queryInterface.createTable('users', {
+           queryInterface.createTable('user', {
              id: {
                type: Sequelize.UUID,
                allowNull: false,
@@ -38,7 +38,7 @@ module.exports = {
    
      down: async (queryInterface, Sequelize) => {
        return queryInterface.sequelize.transaction((t) => {
-         return queryInterface.dropTable('users', { transaction: t });
+         return queryInterface.dropTable('user', { transaction: t });
        });
      }
    };

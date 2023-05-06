@@ -9,15 +9,19 @@ module.exports = {
                primaryKey: true,
                defaultValue: Sequelize.literal('uuid_generate_v4()'),
              },
-             ask: {
+             title: {
                type: Sequelize.STRING,
+               allowNull: false,
+             },
+             deadLine: {
+               type: Sequelize.DATE,
                allowNull: false,
              },
              userId: {
                type: Sequelize.UUID,
                allowNull: false,
                references: {
-                 model: "users",
+                 model: "user",
                  key: "id"
                }
              },
