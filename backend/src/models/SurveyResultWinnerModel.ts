@@ -1,36 +1,37 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import User from "./User";
-import SurveyOption from "./SurveyOption";
+import User from "./UserModel";
+import SurveyOption from "./SurveyOptionModel";
 
 
 
-class UserSurveyVote extends Model {}
+class SurveyResultWinner extends Model {}
 
 
-export default UserSurveyVote.init({
+export default SurveyResultWinner.init({
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
                primaryKey: true,
                allowNull: false
           },  
-          userId: {
+          surveyId: {
                type: DataTypes.UUID,
                allowNull: false,                   
           },
-          surveyOptionId: {
+          winnerSurveyOptionId: {
                type: DataTypes.UUID,
                allowNull: false,                   
           }
+
    }, {
-       tableName: "user_survey_vote",
+       tableName: "survey_result_winner",
        timestamps: true,
        sequelize: sequelize
    });
 
-   UserSurveyVote.belongsTo(User, {foreignKey:"userId"});
-   UserSurveyVote.belongsTo(SurveyOption, {foreignKey:"surveyOptionId"});
+SurveyResultWinner.belongsTo(SurveyOption, {foreignKey:"winnerSurveyOptionId"});
+
 
 
 

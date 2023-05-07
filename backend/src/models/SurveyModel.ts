@@ -1,8 +1,8 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import User from "./User";
-import SurveyOption from "./SurveyOption";
-import SurveyResultWinner from "./SurveyResultWinner";
+import User from "./UserModel";
+import SurveyOption from "./SurveyOptionModel";
+import SurveyResultWinner from "./SurveyResultWinnerModel";
 
 
 class Survey extends Model{

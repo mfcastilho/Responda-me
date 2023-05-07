@@ -4,19 +4,13 @@ import { ConnectionRefusedError,UniqueConstraintError,ValidationError} from 'seq
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as makeId }from 'uuid';
-import User from "../models/User";
+import UserModel from "../models/UserModel";
+import {User} from "../classes/User";
 
 
 class AuthController {
 
-     // private email: string;
-     // private password: string;
-
-     // constructor(email: string, password: string) {
-     //      this.email = email;
-     //      this.password = password;
-     // }
-
+   
      public async login(req: Request, res:Response){
 
           try {
@@ -58,10 +52,9 @@ class AuthController {
           try {
 
                const {name, email, password} = req.body;
- 
                const hashPassword = bcrypt.hashSync(password, 10);
 
-               const verifyIfUserExists = await User.findOne({
+               const verifyIfUserExists = await UserModel.findOne({
                     where: {email: email}
                })
 
@@ -69,16 +62,13 @@ class AuthController {
                     return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
                }
 
-               const newUser = {
-                    id: makeId(),
-                    name,
-                    email,
-                    password: hashPassword
-               } 
-
-               await User.create(newUser);
+               const id = makeId();
+               const newUser = JSON.stringify(new User(id,name, email, hashPassword));
+               const userData = JSON.parse(newUser); 
+               
+               await UserModel.create(userData);
           
-               return res.status(201).json({data:newUser});
+               return res.status(201).json({data:userData});
                
           } catch (error: unknown) {
                if(error instanceof ConnectionRefusedError){
