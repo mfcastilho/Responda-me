@@ -8,6 +8,8 @@ import UserModel from "../models/UserModel";
 import {User} from "../classes/User";
 
 
+
+
 class AuthController {
 
    
@@ -25,13 +27,28 @@ class AuthController {
                     }));   
                     res.status(400).json({message:errors});
                }
+               
 
-               const data = {
-                    email: email,
-                    password: password
+               const user:any | null = await UserModel.findOne({
+                    where: {email: email}
+               });
+
+               if(!user){
+                    res.status(401).json({message:"Email ou senha inválidos"});
                }
 
-               res.status(200).json({data: data});
+               const verifyIfThePasswordIsCorrect = await bcrypt.compare(password, user.password);
+
+               if(!verifyIfThePasswordIsCorrect){
+                    res.status(401).json({message:"Email ou senha inválidos"});
+               }
+
+               const secretOrPrivateKey: string | undefined = process.env.JWT_SECRET;
+               if (!secretOrPrivateKey) {
+                    throw new Error("JWT_SECRET is not defined");
+                  }
+               const token= jwt.sign({id: user.id}, secretOrPrivateKey)
+               res.status(200).json({token, user:{id:user.id, name:user.name, email:user.email}});
                
           } catch (error: unknown) {
 
@@ -65,7 +82,7 @@ class AuthController {
                const id = makeId();
                const newUser = JSON.stringify(new User(id,name, email, hashPassword));
                const userData = JSON.parse(newUser); 
-               
+
                await UserModel.create(userData);
           
                return res.status(201).json({data:userData});
