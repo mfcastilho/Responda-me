@@ -44,10 +44,7 @@ export default Survey.init({
      sequelize: sequelize
 });
 
-Survey.hasMany(SurveyOption, {
-     foreignKey:"userId",
-     as: "user"
-});
+Survey.hasMany(SurveyOption, {foreignKey: "surveyId"});
 Survey.hasOne(SurveyResultWinner);
 
 

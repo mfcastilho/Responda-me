@@ -1,12 +1,26 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
+import SurveyModel from "../models/SurveyModel";
 
 
 
-class SurveyOption extends Model {}
+class SurveyOptionModel extends Model {
+
+     id: string | undefined;
+     surveyAnswerOption: string | undefined;
+     surveyAnswerOptionNumber: number | undefined;
+     surveyId: string | undefined;
+
+     super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyId:string){
+          this.id = id;
+          this.surveyAnswerOption = surveyAnswerOption;
+          this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
+          this.surveyId = surveyId;
+     }
+}
 
 
-export default SurveyOption.init({
+export default SurveyOptionModel.init({
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
@@ -23,13 +37,19 @@ export default SurveyOption.init({
           }, 
           surveyId: {
                type: DataTypes.UUID,
-               allowNull: false,                   
+               allowNull: false, 
+               references:{
+                    model: SurveyModel,
+                    key: "id"
+               }                  
           }
    }, {
        tableName: "survey_option",
        timestamps: true,
        sequelize: sequelize
    });
+
+// SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
 
 
 

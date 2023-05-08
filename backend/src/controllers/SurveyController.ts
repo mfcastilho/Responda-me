@@ -5,6 +5,8 @@ import { v4 as makeId }from 'uuid';
 import SurveyModel from "../models/SurveyModel";
 import { Survey } from "../classes/Survey";
 import UserModel from "../models/UserModel";
+import { SurveyOption } from "../classes/SurveyOption";
+import SurveyOptionModel from "../models/SurveyOptionModel";
 
 export default class SurveyController{
 
@@ -12,7 +14,7 @@ export default class SurveyController{
           
           try {
 
-               const {title, deadLine, userId}= req.body;
+               const {title, deadLine, userId, surveyOptions}= req.body;
 
                const verifyIfTheUserExists = await UserModel.findByPk(userId);
 
@@ -23,8 +25,25 @@ export default class SurveyController{
                const id = makeId();
                const newSurvey = JSON.stringify(new Survey(id, title, deadLine, userId));
                const newSurveyData = JSON.parse(newSurvey);
-
+               
                const surveyPersisted = await SurveyModel.create(newSurveyData);
+
+               async function saveSurveyOptions(){
+                    let surveysOptions:any = [];
+                    let index = 0;
+                    for(let option of surveyOptions){
+                              const id = makeId();
+                              const surveyOption = JSON.stringify(new SurveyOption(id, option.surveyAnswerOption, index+1, newSurveyData.id));
+                              const surveyOptionData = JSON.parse(surveyOption);
+                              surveysOptions.push(surveyOptionData);
+                              console.log(surveyOptionData);
+                              await SurveyOptionModel.create(surveyOptionData);
+                              index++;
+                    }
+               }
+
+               await saveSurveyOptions();
+
                return res.status(200).json({data: surveyPersisted});
                
           } catch (error) {
