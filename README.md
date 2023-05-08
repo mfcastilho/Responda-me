@@ -1,4 +1,4 @@
-# Responda-me
+# Responda-me (em desenvolvimento)
 
 Bem-vindo ao Responda-me, um sistema de enquetes onde os usuários podem criar e responder enquetes após se registrarem e fazerem login.
 
