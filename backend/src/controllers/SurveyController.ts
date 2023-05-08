@@ -1,12 +1,17 @@
 import { Request, Response } from "express";
 import {Result, validationResult} from 'express-validator';
+
 import { ConnectionRefusedError,UniqueConstraintError,ValidationError} from 'sequelize';
+
 import { v4 as makeId }from 'uuid';
+
 import SurveyModel from "../models/SurveyModel";
-import { Survey } from "../classes/Survey";
 import UserModel from "../models/UserModel";
-import { SurveyOption } from "../classes/SurveyOption";
 import SurveyOptionModel from "../models/SurveyOptionModel";
+
+import { Survey } from "../classes/Survey";
+import { SurveyOption } from "../classes/SurveyOption";
+
 
 export default class SurveyController{
 
@@ -15,6 +20,16 @@ export default class SurveyController{
           try {
 
                const {title, deadLine, userId, surveyOptions}= req.body;
+               const resultValidation: Result = validationResult(req);
+
+               if(!resultValidation.isEmpty()){
+                    const errors = resultValidation.array().map(error=> ({
+                         path: error.path,
+                         msg: error.msg
+                    }));   
+                    res.status(400).json({message:errors});
+               }
+
 
                const verifyIfTheUserExists = await UserModel.findByPk(userId);
 
@@ -25,18 +40,14 @@ export default class SurveyController{
                const id = makeId();
                const newSurvey = JSON.stringify(new Survey(id, title, deadLine, userId));
                const newSurveyData = JSON.parse(newSurvey);
-               
                const surveyPersisted = await SurveyModel.create(newSurveyData);
 
                async function saveSurveyOptions(){
-                    let surveysOptions:any = [];
                     let index = 0;
                     for(let option of surveyOptions){
                               const id = makeId();
                               const surveyOption = JSON.stringify(new SurveyOption(id, option.surveyAnswerOption, index+1, newSurveyData.id));
                               const surveyOptionData = JSON.parse(surveyOption);
-                              surveysOptions.push(surveyOptionData);
-                              console.log(surveyOptionData);
                               await SurveyOptionModel.create(surveyOptionData);
                               index++;
                     }
