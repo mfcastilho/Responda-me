@@ -17,6 +17,10 @@ module.exports = {
                          type: Sequelize.INTEGER,
                          allowNull: false,
                     },
+                    totalOptionVotes: {
+                         type: Sequelize.INTEGER,
+                         allowNull: false,
+                    },
                     surveyId: {
                          type: Sequelize.UUID,
                          allowNull: false,

@@ -46,7 +46,8 @@ export default class SurveyController{
                     let index = 0;
                     for(let option of surveyOptions){
                               const id = makeId();
-                              const surveyOption = JSON.stringify(new SurveyOption(id, option.surveyAnswerOption, index+1, newSurveyData.id));
+                              const surveyOptionInitialVote = 0;
+                              const surveyOption = JSON.stringify(new SurveyOption(id, option.surveyAnswerOption, index+1, surveyOptionInitialVote, newSurveyData.id));
                               const surveyOptionData = JSON.parse(surveyOption);
                               await SurveyOptionModel.create(surveyOptionData);
                               index++;

@@ -27,8 +27,7 @@ class FormValidations{
 
           check("surveyAnswerOption") 
                .custom(({ req })=>{
-
-                    
+              
                     req.body.surveyOptions.forEach((option:any)=>{
                          if(option.surveyAnswerOption == "" || option.surveyAnswerOption == undefined){
                               throw new Error("Os campos de opções de respostas não podem ficar vazios");
