@@ -4,6 +4,7 @@ import Survey from "./SurveyModel";
 
 
 class User extends Model{
+     
      id: string  | undefined;
      name: string  | undefined;
      email: string  | undefined;

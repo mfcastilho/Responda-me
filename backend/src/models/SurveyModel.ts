@@ -6,7 +6,17 @@ import SurveyResultWinner from "./SurveyResultWinnerModel";
 
 
 class Survey extends Model{
+     id: string  | undefined;
+     title: string  | undefined;
+     deadLine: Date  | undefined;
+     userId: string | undefined;
 
+     super(id:string, title:string, deadline:Date, userId:string){
+          this.id = id;
+          this.title = title;
+          this.deadLine = deadline;
+          this.userId = userId;
+     }
 }
 
 export default Survey.init({
@@ -16,8 +26,12 @@ export default Survey.init({
           primaryKey: true,
           allowNull: false
      },
-     ask: {
+     title: {
           type: DataTypes.STRING,
+          allowNull: false,
+     },
+     deadLine:{
+          type: DataTypes.DATE,
           allowNull: false,
      },
      userId: {

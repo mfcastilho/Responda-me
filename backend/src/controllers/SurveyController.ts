@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import {Result, validationResult} from 'express-validator';
 import { ConnectionRefusedError,UniqueConstraintError,ValidationError} from 'sequelize';
 import { v4 as makeId }from 'uuid';
+import SurveyModel from "../models/SurveyModel";
+import { Survey } from "../classes/Survey";
+import UserModel from "../models/UserModel";
 
 export default class SurveyController{
 
@@ -9,16 +12,20 @@ export default class SurveyController{
           
           try {
 
-               const {ask, userId}= req.body;
+               const {title, deadLine, userId}= req.body;
 
-               const newSurvey = {
-                    id: makeId(),
-                    ask: ask,
-                    userId: userId
+               const verifyIfTheUserExists = await UserModel.findByPk(userId);
+
+               if(!verifyIfTheUserExists){
+                    return res.status(401).json({message: "Não foi possível criar a enquete pois o usuário não existe"});
                }
-               
 
-               res.status(200).json(newSurvey);
+               const id = makeId();
+               const newSurvey = JSON.stringify(new Survey(id, title, deadLine, userId));
+               const newSurveyData = JSON.parse(newSurvey);
+
+               const surveyPersisted = await SurveyModel.create(newSurveyData);
+               return res.status(200).json({data: surveyPersisted});
                
           } catch (error) {
                

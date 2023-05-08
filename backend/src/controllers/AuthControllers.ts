@@ -69,11 +69,11 @@ class AuthController {
           try {
 
                const {name, email, password} = req.body;
-               const hashPassword = bcrypt.hashSync(password, 10);
-
+               const hashPassword = await bcrypt.hash(password, 10);
+               
                const verifyIfUserExists = await UserModel.findOne({
                     where: {email: email}
-               })
+               });
 
                if(verifyIfUserExists){
                     return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
