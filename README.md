@@ -17,6 +17,7 @@ Bem-vindo ao Responda-me, um sistema de enquetes onde os usuários podem criar e
 - TypeScript: Linguagem de programação utilizada para o desenvolvimento do backend.
 - Node.js: Ambiente de execução JavaScript utilizado para o desenvolvimento do backend.
 - Express: Framework web utilizado para construir a API REST.
+- Express-validator: Conjunto de middlewares express usado para fazer validações.
 - Sequelize: ORM (Object-Relational Mapping) para interagir com o banco de dados PostgreSQL.
 - PostgreSQL: Banco de dados relacional utilizado para armazenar os dados do sistema.
 - JWT (JSON Web Token): Método de autenticação utilizado para verificar a identidade do usuário.
