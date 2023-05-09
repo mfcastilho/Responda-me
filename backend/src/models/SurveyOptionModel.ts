@@ -9,16 +9,16 @@ class SurveyOptionModel extends Model {
      id: string | undefined;
      surveyAnswerOption: string | undefined;
      surveyAnswerOptionNumber: number | undefined;
-     totalOptionVotes: number | undefined;
+     surveyOptionVotes: number | undefined;
      surveyId: string | undefined;
 
-     super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, totalOptionVotes: number, surveyId:string){
-          this.id = id;
-          this.surveyAnswerOption = surveyAnswerOption;
-          this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
-          this.totalOptionVotes = totalOptionVotes;
-          this.surveyId = surveyId;
-     }
+     // super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyOptionVotes: number, surveyId:string){
+     //      this.id = id;
+     //      this.surveyAnswerOption = surveyAnswerOption;
+     //      this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
+     //      this.surveyOptionVotes = surveyOptionVotes;
+     //      this.surveyId = surveyId;
+     // }
 }
 
 

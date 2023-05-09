@@ -94,31 +94,63 @@ export default class SurveyController{
 
                const survey = await SurveyModel.findByPk(id);
 
-               const surveyEditedQuantityLines:any = await SurveyModel.update({
-                         "title": title === undefined ? survey?.title : title,
-                         "deadLine": deadLine === undefined ? survey?.deadLine : deadLine,
+               const [surveyEditedQuantityLines, updatedregisters]: any = await SurveyModel.update({
+                         "title": title == undefined ? survey?.title : title,
+                         "deadLine": deadLine == undefined ? survey?.deadLine : deadLine,
                     },
                     {where: {id:id}}
                );
 
                
-               
 
                
                if(surveyEditedQuantityLines > 0){
                     const surveyUpdated:any = await SurveyModel.findByPk(id);
-
-                    const surveyOpptions = await SurveyOptionModel.findAll({
-                         include: [{
-                              model: SurveyModel,
-                              as: "survey",
+                    const optionsSurvey = await SurveyOptionModel.findAll(
+                         {
                               where:{surveyId:surveyUpdated.id}
-                         }]
-                    });
+                         }
+                    );
 
-                    console.log(surveyOpptions);
-
-
+                    async function updateSurveyOptions() {
+                         const existingOptionIds = optionsSurvey.map((option) => option.id);
+                       
+                         // Atualizando opções de resposta existentes
+                         for (let i = 0; i < surveyOptions.length; i++) {
+                           const option = surveyOptions[i];
+                           if (option.id && existingOptionIds.includes(option.id)) {
+                             await SurveyOptionModel.update(
+                               {
+                                 surveyAnswerOption: option.surveyAnswerOption,
+                                 surveyAnswerOptionNumber: i + 1,
+                                 totalOptionVotes: 0 // Valor inicial
+                               },
+                               { where: { id: option.id } }
+                             );
+                           }
+                         }
+                       
+                         // Removendo opções de resposta ausentes
+                         const optionIdsToRemove = existingOptionIds.filter((id) => !surveyOptions.some((option:any) => option.id === id));
+                         await SurveyOptionModel.destroy({ where: { id: optionIdsToRemove } });
+                       
+                         // Adicionando novas opções de resposta
+                         const optionIdsToAdd = surveyOptions.filter((option:any) => !option.id).map((option:any) => option.id);
+                         for (let i = 0; i < surveyOptions.length; i++) {
+                           const option = surveyOptions[i];
+                           if (!option.id || optionIdsToAdd.includes(option.id)) {
+                             await SurveyOptionModel.create({
+                               surveyId: surveyUpdated.id,
+                               surveyAnswerOption: option.surveyAnswerOption,
+                               surveyAnswerOptionNumber: i + 1,
+                               totalOptionVotes: 0 // Valor inicial
+                             });
+                           }
+                         }
+                       }
+                       
+                       await updateSurveyOptions();
+     
                     res.status(200).json({data: surveyUpdated});
                }else{
                     res.status(400).json({message: "Não foi possível realizar a edição"});
