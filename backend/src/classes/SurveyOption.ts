@@ -4,14 +4,14 @@ export class SurveyOption{
      id: string;
      surveyAnswerOption: string;
      surveyAnswerOptionNumber: number;
-     surveyOptionVotes: number;
+     totalOptionVotes: number;
      surveyId: string;
 
-     constructor(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyOptionVotes: number, surveyId:string){
+     constructor(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, totalOptionVotes: number, surveyId:string){
           this.id = id;
           this.surveyAnswerOption = surveyAnswerOption;
           this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
-          this.surveyOptionVotes = surveyOptionVotes;
+          this.totalOptionVotes = totalOptionVotes;
           this.surveyId = surveyId;
      }
 
@@ -30,8 +30,8 @@ export class SurveyOption{
           return this.surveyAnswerOptionNumber;
      }
 
-     public getSurveyOptionVotes():number{
-          return this.surveyOptionVotes;
+     public getTotalOptionVotes():number{
+          return this.totalOptionVotes;
      }
 
      public getSurveyId():string{
@@ -51,8 +51,8 @@ export class SurveyOption{
           this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
      }
 
-     public setsurveyOptionVotes(surveyOptionVotes:number){
-          this.surveyOptionVotes = surveyOptionVotes;
+     public setTotalOptionVotes(totalOptionVotes:number){
+          this.totalOptionVotes = totalOptionVotes;
      }
 
      public setSurveyId(surveyId:string){

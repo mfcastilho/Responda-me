@@ -26,7 +26,7 @@ class FormValidations{
                .notEmpty().withMessage("Campo obrigatório").bail(),
 
           check("surveyAnswerOption") 
-               .custom(({ req })=>{
+               .custom((value,{ req })=>{
               
                     req.body.surveyOptions.forEach((option:any)=>{
                          if(option.surveyAnswerOption == "" || option.surveyAnswerOption == undefined){

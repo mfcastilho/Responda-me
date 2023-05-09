@@ -9,14 +9,14 @@ class SurveyOptionModel extends Model {
      id: string | undefined;
      surveyAnswerOption: string | undefined;
      surveyAnswerOptionNumber: number | undefined;
-     surveyOptionVotes: number | undefined;
+     totalOptionVotes: number | undefined;
      surveyId: string | undefined;
 
-     super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyOptionVotes: number, surveyId:string){
+     super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, totalOptionVotes: number, surveyId:string){
           this.id = id;
           this.surveyAnswerOption = surveyAnswerOption;
           this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
-          this.surveyOptionVotes = surveyOptionVotes;
+          this.totalOptionVotes = totalOptionVotes;
           this.surveyId = surveyId;
      }
 }
@@ -37,7 +37,7 @@ export default SurveyOptionModel.init({
                type: DataTypes.INTEGER,
                allowNull: false,
           }, 
-          surveyOptionVotes: {
+          totalOptionVotes: {
                type: DataTypes.INTEGER,
                allowNull: false,
           }, 

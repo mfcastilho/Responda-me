@@ -22,19 +22,17 @@ export default class SurveyController{
                const {title, deadLine, userId, surveyOptions}= req.body;
                const resultValidation: Result = validationResult(req);
 
+               const verifyIfTheUserExists = await UserModel.findByPk(userId);
+               if(!verifyIfTheUserExists){
+                    return res.status(401).json({message: "Não foi possível criar a enquete pois o usuário não existe"});
+               }
+
                if(!resultValidation.isEmpty()){
                     const errors = resultValidation.array().map(error=> ({
                          path: error.path,
                          msg: error.msg
                     }));   
                     res.status(400).json({message:errors});
-               }
-
-
-               const verifyIfTheUserExists = await UserModel.findByPk(userId);
-
-               if(!verifyIfTheUserExists){
-                    return res.status(401).json({message: "Não foi possível criar a enquete pois o usuário não existe"});
                }
 
                const id = makeId();
@@ -49,6 +47,7 @@ export default class SurveyController{
                               const surveyOptionInitialVote = 0;
                               const surveyOption = JSON.stringify(new SurveyOption(id, option.surveyAnswerOption, index+1, surveyOptionInitialVote, newSurveyData.id));
                               const surveyOptionData = JSON.parse(surveyOption);
+                              console.log(surveyOptionData)
                               await SurveyOptionModel.create(surveyOptionData);
                               index++;
                     }
@@ -69,6 +68,74 @@ export default class SurveyController{
                if(error instanceof ValidationError){
                     return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
                }  
+          }
+     }
+
+     public async editSurvey(req: Request, res: Response){
+
+          try {
+
+               const { title, deadLine, userId, surveyOptions }= req.body;
+               const { id } = req.params;
+               const resultValidation: Result = validationResult(req);
+
+               const verifyIfTheUserExists = await UserModel.findByPk(userId);
+               if(!verifyIfTheUserExists){
+                    return res.status(401).json({message: "Não foi possível editar a enquete pois o usuário não existe"});
+               }
+
+               if(!resultValidation.isEmpty()){
+                    const errors = resultValidation.array().map(error=> ({
+                         path: error.path,
+                         msg: error.msg
+                    }));   
+                    res.status(400).json({message:errors});
+               }
+
+               const survey = await SurveyModel.findByPk(id);
+
+               const surveyEditedQuantityLines:any = await SurveyModel.update({
+                         "title": title === undefined ? survey?.title : title,
+                         "deadLine": deadLine === undefined ? survey?.deadLine : deadLine,
+                    },
+                    {where: {id:id}}
+               );
+
+               
+               
+
+               
+               if(surveyEditedQuantityLines > 0){
+                    const surveyUpdated:any = await SurveyModel.findByPk(id);
+
+                    const surveyOpptions = await SurveyOptionModel.findAll({
+                         include: [{
+                              model: SurveyModel,
+                              as: "survey",
+                              where:{surveyId:surveyUpdated.id}
+                         }]
+                    });
+
+                    console.log(surveyOpptions);
+
+
+                    res.status(200).json({data: surveyUpdated});
+               }else{
+                    res.status(400).json({message: "Não foi possível realizar a edição"});
+               }
+
+               
+          } catch (error) {
+
+               if(error instanceof ConnectionRefusedError){
+                    return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
+               }
+               if(error instanceof UniqueConstraintError){
+                    return res.status(400).json(error.parent.message);
+               }
+               if(error instanceof ValidationError){
+                    return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
+               } 
           }
      }
 }
