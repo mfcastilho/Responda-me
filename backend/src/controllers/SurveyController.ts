@@ -89,7 +89,7 @@ export default class SurveyController{
                          path: error.path,
                          msg: error.msg
                     }));   
-                    res.status(400).json({message:errors});
+                    return res.status(400).json({message:errors});
                }
 
                const survey = await SurveyModel.findByPk(id);
@@ -100,8 +100,6 @@ export default class SurveyController{
                     },
                     {where: {id:id}}
                );
-
-               
 
                
                if(surveyEditedQuantityLines > 0){
@@ -137,21 +135,34 @@ export default class SurveyController{
                          // Adicionando novas opções de resposta
                          const optionIdsToAdd = surveyOptions.filter((option:any) => !option.id).map((option:any) => option.id);
                          for (let i = 0; i < surveyOptions.length; i++) {
-                           const option = surveyOptions[i];
-                           if (!option.id || optionIdsToAdd.includes(option.id)) {
-                             await SurveyOptionModel.create({
-                               surveyId: surveyUpdated.id,
-                               surveyAnswerOption: option.surveyAnswerOption,
-                               surveyAnswerOptionNumber: i + 1,
-                               totalOptionVotes: 0 // Valor inicial
-                             });
-                           }
+                              const option = surveyOptions[i];
+                              if (!option.id || optionIdsToAdd.includes(option.id)) {
+                                   await SurveyOptionModel.create({
+                                        surveyId: surveyUpdated.id,
+                                        surveyAnswerOption: option.surveyAnswerOption,
+                                        surveyAnswerOptionNumber: i + 1,
+                                        totalOptionVotes: 0 // Valor inicial
+                                   });
+                              }
                          }
-                       }
+                    }
                        
-                       await updateSurveyOptions();
+                         //chamando a função assíncrona updateSurveyOptions
+                         await updateSurveyOptions();
+
+
+                         const optionsSurveyUpdated = await SurveyOptionModel.findAll(
+                              {
+                                   where:{surveyId:surveyUpdated.id}
+                              }
+                         );
+
+                         const completeSurvey = {
+                              surveyUpdated,
+                              surveyOptions: optionsSurveyUpdated
+                         }
      
-                    res.status(200).json({data: surveyUpdated});
+                    res.status(200).json({data: completeSurvey});
                }else{
                     res.status(400).json({message: "Não foi possível realizar a edição"});
                }
