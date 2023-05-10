@@ -235,7 +235,9 @@ export default class SurveyController{
 
           const { userId } =  req.params;
 
-          if(!userId){
+          const verifyIfTheUserExists = await UserModel.findByPk(userId);
+
+          if(!verifyIfTheUserExists){
                return res.status(400).json({error:"Usuário não existe."});
           }
 
@@ -300,7 +302,61 @@ export default class SurveyController{
      }
 
      public async getAllSurveys(req: Request, res: Response){
+          try {
+               
+               const allSurveys = await SurveyModel.findAll();
 
+               const allSurveyOptions:any = [];
+               async function getUserSurveysAnswerOptions(){
+
+               for(let survey of allSurveys){
+                    const userSurveyAnswerOptions = await SurveyOptionModel.findAll({
+                         where:{surveyId:survey.id}
+                    });
+
+                    allSurveyOptions.push(...userSurveyAnswerOptions);
+               }
+          }
+
+          await getUserSurveysAnswerOptions();
+
+          const surveysAndRespectiveOptions:any = [];
+          
+          allSurveys.forEach((survey:SurveyModel) => {
+
+               const surveyOptions:any = [];
+
+               allSurveyOptions.forEach((option:SurveyOptionModel)=>{
+                    if(option.surveyId === survey.id){
+                        surveyOptions.push(option);
+                        console.log(option);
+                    }   
+               });
+
+               const surveyAndOptions = {
+                    ...survey,
+                    surveyOptions
+               }
+
+               surveysAndRespectiveOptions.push(surveyAndOptions);
+          })
+
+
+
+
+               res.status(200).json({surveys: surveysAndRespectiveOptions});
+          } catch (error) {
+               
+               if(error instanceof ConnectionRefusedError){
+                    return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
+               }
+               if(error instanceof UniqueConstraintError){
+                    return res.status(400).json(error.parent.message);
+               }
+               if(error instanceof ValidationError){
+                    return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
+               } 
+          }
      }
 
      public async UserVoteSurveyAnswerOption(req: Request, res: Response){

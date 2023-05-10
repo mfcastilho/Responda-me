@@ -19,8 +19,8 @@ class SurveyModel extends Model{
      }
 
      public static associate(){
-          SurveyModel.hasMany(SurveyOptionModel, {foreignKey: "surveyId", onDelete: "CASCADE"});
-          SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
+          SurveyModel.hasMany(SurveyOptionModel, {sourceKey:"id", foreignKey: "surveyId", as:"survey_option" , onDelete: "CASCADE"});
+          // SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
           SurveyModel.hasOne(SurveyResultWinner);
           SurveyResultWinner.belongsTo(SurveyModel);
      }
@@ -45,7 +45,7 @@ SurveyModel.init({
                type: DataTypes.UUID,
                allowNull: false,
                references:{
-                    model: UserModel,
+                    model: 'UserModel',
                     key: "id"
                }
           } 

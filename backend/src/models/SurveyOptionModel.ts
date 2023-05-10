@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import SurveyModel from "../models/SurveyModel";
+import SurveyModel from "./SurveyModel";
 
 
 
@@ -49,18 +49,20 @@ SurveyOptionModel.init({
                type: DataTypes.UUID,
                allowNull: false, 
                references:{
-                    model: SurveyModel,
+                    model: 'SurveyModel',
                     key: "id"
                }                  
           }
      }, {
        tableName: "survey_option",
        timestamps: true,
-       sequelize: sequelize
+       sequelize: sequelize,
+       modelName: "SurveyOption",
      }
 );
 
-SurveyOptionModel.associate()
+
+SurveyOptionModel.associate();
 
 export default  SurveyOptionModel;
 
