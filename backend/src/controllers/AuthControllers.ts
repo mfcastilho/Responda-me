@@ -88,6 +88,7 @@ class AuthController {
                return res.status(201).json({data:userData});
                
           } catch (error: unknown) {
+               
                if(error instanceof ConnectionRefusedError){
                     return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
                }
@@ -99,7 +100,6 @@ class AuthController {
                }   
           }
      }
-
 
 }
 

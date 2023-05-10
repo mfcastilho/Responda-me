@@ -1,7 +1,8 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
 import User from "./UserModel";
-import SurveyOption from "./SurveyOptionModel";
+import SurveyOptionModel from "./SurveyOptionModel";
+import SurveyModel from "./SurveyModel";
 
 
 
@@ -10,7 +11,8 @@ class UserSurveyVoteModel extends Model {
 
      public static associate(){
           UserSurveyVoteModel.belongsTo(User, {foreignKey:"userId"});
-          UserSurveyVoteModel.belongsTo(SurveyOption, {foreignKey:"surveyOptionId"});
+          UserSurveyVoteModel.belongsTo(SurveyOptionModel, {foreignKey:"surveyOptionId"});
+          UserSurveyVoteModel.belongsTo(SurveyModel, {foreignKey:"surveyId"});
      }
 }
 
@@ -23,6 +25,10 @@ UserSurveyVoteModel.init({
                allowNull: false
           },  
           userId: {
+               type: DataTypes.UUID,
+               allowNull: false,                   
+          },
+          surveyId: {
                type: DataTypes.UUID,
                allowNull: false,                   
           },

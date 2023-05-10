@@ -17,6 +17,14 @@ module.exports = {
                               key: "id"
                          }
                     },
+                    surveyId: {
+                         type: Sequelize.UUID,
+                         allowNull: false,
+                         references: {
+                              model: "surveys",
+                              key: "id"
+                         }
+                    },
                     surveyOptionId: {
                          type: Sequelize.UUID,
                          allowNull: false,

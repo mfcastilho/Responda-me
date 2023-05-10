@@ -14,4 +14,6 @@ router.post("/login", validation.loginValidation, authController.login);
 router.post("/cadastrar-usuario", validation.loginValidation, authController.storeUser);
 
 
+
+
 export default router;

@@ -11,6 +11,7 @@ import SurveyOptionModel from "../models/SurveyOptionModel";
 
 import { Survey } from "../classes/Survey";
 import { SurveyOption } from "../classes/SurveyOption";
+import UserSurveyVoteModel from "../models/UserSurveyVoteModel";
 
 
 export default class SurveyController{
@@ -19,7 +20,8 @@ export default class SurveyController{
           
           try {
 
-               const {title, deadLine, userId, surveyOptions}= req.body;
+               const {userId} = req.params;
+               const {title, deadLine, surveyOptions}= req.body;
                const resultValidation: Result = validationResult(req);
 
                const verifyIfTheUserExists = await UserModel.findByPk(userId);
@@ -32,7 +34,7 @@ export default class SurveyController{
                          path: error.path,
                          msg: error.msg
                     }));   
-                    res.status(400).json({message:errors});
+                    return res.status(400).json({message:errors});
                }
 
                const id = makeId();
@@ -87,7 +89,8 @@ export default class SurveyController{
 
           try {
 
-               const { title, deadLine, userId, surveyOptions }= req.body;
+               const { userId } = req.params;
+               const { title, deadLine, surveyOptions }= req.body;
                const { id } = req.params;
                const resultValidation: Result = validationResult(req);
 
@@ -174,9 +177,9 @@ export default class SurveyController{
                               surveyOptions: optionsSurveyUpdated
                          }
      
-                    res.status(200).json({data: completeSurvey});
+                    return res.status(200).json({data: completeSurvey});
                }else{
-                    res.status(400).json({message: "Não foi possível realizar a edição"});
+                    return res.status(400).json({message: "Não foi possível realizar a edição"});
                }
 
                
@@ -344,7 +347,7 @@ export default class SurveyController{
 
 
 
-               res.status(200).json({surveys: surveysAndRespectiveOptions});
+               return res.status(200).json({surveys: surveysAndRespectiveOptions});
           } catch (error) {
                
                if(error instanceof ConnectionRefusedError){
@@ -359,8 +362,80 @@ export default class SurveyController{
           }
      }
 
-     public async UserVoteSurveyAnswerOption(req: Request, res: Response){
+     public async userVoteSurveyAnswerOption(req: Request, res: Response){
+          
+          try {
+               const { surveyId } = req.params;
+               const { userId, surveyOptionId } = req.body;
 
+               const survey = await SurveyModel.findByPk(surveyId);
+               if(!survey){
+                    return res.status(404).json({error:"Enquete não existe."});
+               }
+
+               
+               const user = await UserModel.findByPk(userId);
+               if(!user){
+                    return res.status(404).json({error:"Usuário não existe."});
+               }
+
+               const surveyAnswerOption = await SurveyOptionModel.findByPk(surveyOptionId);
+               if(!surveyAnswerOption){
+                    return res.status(404).json({error:"A opção de resposta da enquete não existe."});
+               }
+
+               const checkIfTheUserHasAlreadyVoted = await UserSurveyVoteModel.findOne({
+                    where:{
+                         userId: userId,
+                         surveyId:surveyId
+                    }
+               });
+
+               if(checkIfTheUserHasAlreadyVoted){
+                    return res.status(400).json({message:"O usuário já votou na enquete."});
+               }
+
+               const userSurveyVote = await UserSurveyVoteModel.create({
+                    id:makeId(),
+                    userId:userId,
+                    surveyOptionId:surveyOptionId
+               });
+
+               if(!userSurveyVote){
+                    return res.status(400).json({error:"Voto não pode ser computado."});
+               }
+               
+               const atualNumberOfVotes:any = surveyAnswerOption.totalOptionVotes
+
+               const [numberOfLinesUpdated] = await SurveyOptionModel.update({
+                    totalOptionVotes:   atualNumberOfVotes + 1
+               }, 
+               {
+                    where:{id:surveyOptionId}
+               });
+
+
+               if(numberOfLinesUpdated === 0){
+                    return res.status(400).json({error:"Voto não pode ser computado."});
+               }
+
+
+               const surveyAnswerOptionUpdated = await SurveyOptionModel.findByPk(surveyOptionId);
+
+               return res.status(200).json({surveyAnswerOptionUpdated});
+
+          } catch (error) {
+               
+               if(error instanceof ConnectionRefusedError){
+                    return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
+               }
+               if(error instanceof UniqueConstraintError){
+                    return res.status(400).json(error.parent.message);
+               }
+               if(error instanceof ValidationError){
+                    return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
+               } 
+          }
      }
 }
 

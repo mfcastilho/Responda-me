@@ -2,6 +2,7 @@
 import express from 'express';
 import authRoutes from './routes/authRoutes';
 import surveyRouters from "./routes/surveyRoutes";
+import userRoutes from "./routes/userRoutes";
 
 
 
@@ -19,6 +20,7 @@ app.use(express.json());
 /* -- Rotas -- */
 app.use("/api/v1/", authRoutes);
 app.use("/api/v1/", surveyRouters);
+app.use("/api/v1/", userRoutes);
 
 
 

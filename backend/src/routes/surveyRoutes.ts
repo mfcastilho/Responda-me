@@ -14,4 +14,6 @@ router.delete("/usuario/:userId/enquete/:id/deletar-enquete", surveyController.d
 
 router.get("/enquetes", surveyController.getAllSurveys);
 
+router.post("/enquete/:surveyId", surveyController.userVoteSurveyAnswerOption);
+
 export default router;
