@@ -5,10 +5,17 @@ import SurveyOption from "./SurveyOptionModel";
 
 
 
-class UserSurveyVote extends Model {}
+class UserSurveyVoteModel extends Model {
 
 
-export default UserSurveyVote.init({
+     public static associate(){
+          UserSurveyVoteModel.belongsTo(User, {foreignKey:"userId"});
+          UserSurveyVoteModel.belongsTo(SurveyOption, {foreignKey:"surveyOptionId"});
+     }
+}
+
+
+UserSurveyVoteModel.init({
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
@@ -27,12 +34,12 @@ export default UserSurveyVote.init({
        tableName: "user_survey_vote",
        timestamps: true,
        sequelize: sequelize
-   });
+   }
+);
 
-   UserSurveyVote.belongsTo(User, {foreignKey:"userId"});
-   UserSurveyVote.belongsTo(SurveyOption, {foreignKey:"surveyOptionId"});
+UserSurveyVoteModel.associate();
 
-
+export default UserSurveyVoteModel;
 
 
 

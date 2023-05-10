@@ -52,10 +52,22 @@ export default class SurveyController{
                               index++;
                     }
                }
-
                await saveSurveyOptions();
 
-               return res.status(200).json({data: surveyPersisted});
+               const optionsSurvey = await SurveyOptionModel.findAll(
+                    {
+                         where:{surveyId:surveyPersisted.id}
+                    }
+               );
+
+               const completeSurvey = {
+                    surveyPersisted,
+                    surveyOptions: optionsSurvey
+               }
+
+              
+
+               return res.status(200).json({data: completeSurvey });
                
           } catch (error) {
                
@@ -168,7 +180,7 @@ export default class SurveyController{
                }
 
                
-          } catch (error) {
+          } catch (error:unknown) {
 
                if(error instanceof ConnectionRefusedError){
                     return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
@@ -180,6 +192,53 @@ export default class SurveyController{
                     return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
                } 
           }
+     }
+
+     public async deleteSurvey(req: Request, res: Response){
+          try {
+               const { id } = req.params;
+
+               const verifyIfTheSurveyExists = await SurveyModel.findByPk(id);
+
+               if(!verifyIfTheSurveyExists){
+                    return res.status(400).json({error: "A enquete solicitada não existe."});
+               }
+
+               await SurveyOptionModel.destroy({
+                    where:{surveyId: id}
+               });
+
+               await SurveyModel.destroy({
+                    where:{id: id}
+               });
+
+               
+               return res.status(200).json({data:"Enquete deletada com sucesso"});  
+
+          } catch (error:unknown) {
+
+               if(error instanceof ConnectionRefusedError){
+                    return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
+               }
+               if(error instanceof UniqueConstraintError){
+                    return res.status(400).json(error.parent.message);
+               }
+               if(error instanceof ValidationError){
+                    return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
+               } 
+          }
+     }
+
+     public async getUserSurveys(req: Request, res: Response){
+
+     }
+
+     public async getAllSurveys(req: Request, res: Response){
+
+     }
+
+     public async UserVoteSurveyAnswerOption(req: Request, res: Response){
+
      }
 }
 

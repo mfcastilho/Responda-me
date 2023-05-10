@@ -1,11 +1,11 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
+import { Model, DataTypes, Sequelize, ModelStatic } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import User from "./UserModel";
-import SurveyOption from "./SurveyOptionModel";
+import SurveyOptionModel from "./SurveyOptionModel";
+import UserModel from "./UserModel";
 import SurveyResultWinner from "./SurveyResultWinnerModel";
 
 
-class Survey extends Model{
+class SurveyModel extends Model{
      id: string  | undefined;
      title: string  | undefined;
      deadLine: Date  | undefined;
@@ -17,34 +17,51 @@ class Survey extends Model{
           this.deadLine = deadline;
           this.userId = userId;
      }
+
+     public static associate(){
+          SurveyModel.hasMany(SurveyOptionModel, {foreignKey: "surveyId", onDelete: "CASCADE"});
+          SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
+          SurveyModel.hasOne(SurveyResultWinner);
+          SurveyResultWinner.belongsTo(SurveyModel);
+     }
 }
 
-export default Survey.init({
-     id: {
-          type: DataTypes.UUID,
-          defaultValue: DataTypes.UUIDV4,
-          primaryKey: true,
-          allowNull: false
-     },
-     title: {
-          type: DataTypes.STRING,
-          allowNull: false,
-     },
-     deadLine:{
-          type: DataTypes.DATE,
-          allowNull: false,
-     },
-     userId: {
-          type: DataTypes.UUID,
-          allowNull: false,
-     } 
-}, {
-     tableName: "surveys",
-     timestamps: true,
-     sequelize: sequelize
-});
+SurveyModel.init({
+          id: {
+               type: DataTypes.UUID,
+               defaultValue: DataTypes.UUIDV4,
+               primaryKey: true,
+               allowNull: false
+          },
+          title: {
+               type: DataTypes.STRING,
+               allowNull: false,
+          },
+          deadLine:{
+               type: DataTypes.DATE,
+               allowNull: false,
+          },
+          userId: {
+               type: DataTypes.UUID,
+               allowNull: false,
+               references:{
+                    model: UserModel,
+                    key: "id"
+               }
+          } 
+     }, {
+          tableName: "surveys",
+          timestamps: true,
+          sequelize: sequelize
+     }
+);
 
-// Survey.hasMany(SurveyOption, {foreignKey: "surveyId"});
-Survey.hasOne(SurveyResultWinner);
+SurveyModel.associate();
+
+
+export default SurveyModel;
+
+
+
 
 

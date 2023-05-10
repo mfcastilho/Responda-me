@@ -12,17 +12,21 @@ class SurveyOptionModel extends Model {
      surveyOptionVotes: number | undefined;
      surveyId: string | undefined;
 
-     // super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyOptionVotes: number, surveyId:string){
-     //      this.id = id;
-     //      this.surveyAnswerOption = surveyAnswerOption;
-     //      this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
-     //      this.surveyOptionVotes = surveyOptionVotes;
-     //      this.surveyId = surveyId;
-     // }
+     super(id:string, surveyAnswerOption:string, surveyAnswerOptionNumber:number, surveyOptionVotes: number, surveyId:string){
+          this.id = id;
+          this.surveyAnswerOption = surveyAnswerOption;
+          this.surveyAnswerOptionNumber = surveyAnswerOptionNumber;
+          this.surveyOptionVotes = surveyOptionVotes;
+          this.surveyId = surveyId;
+     }
+
+     public static associate(){
+          // SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
+     }
 }
 
 
-export default SurveyOptionModel.init({
+SurveyOptionModel.init({
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
@@ -49,15 +53,16 @@ export default SurveyOptionModel.init({
                     key: "id"
                }                  
           }
-   }, {
+     }, {
        tableName: "survey_option",
        timestamps: true,
        sequelize: sequelize
-   });
+     }
+);
 
-// SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
+SurveyOptionModel.associate()
 
-
+export default  SurveyOptionModel;
 
 
 
