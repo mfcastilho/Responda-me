@@ -1,6 +1,6 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import Survey from "./SurveyModel";
+import SurveyModel from "./SurveyModel";
 
 
 class UserModel extends Model{
@@ -45,6 +45,15 @@ class UserModel extends Model{
      }
 );
 
-UserModel.hasMany(Survey, { foreignKey: "userId" });
+UserModel.hasMany(SurveyModel, { 
+     foreignKey: "userId", 
+     as:"survey", 
+     onDelete:"CASCADE"
+});
+
+SurveyModel.belongsTo(UserModel, { 
+     foreignKey: "userId", 
+     as:"user"
+});
 
 export default UserModel;

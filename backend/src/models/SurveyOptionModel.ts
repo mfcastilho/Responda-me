@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import SurveyModel from "./SurveyModel";
+import UserSurveyVoteModel from "./UserSurveyVoteModel";
 
 
 
@@ -19,14 +19,11 @@ class SurveyOptionModel extends Model {
           this.totalOptionVotes = totalOptionVotes;
           this.surveyId = surveyId;
      }
-
-     public static associate(){
-          // SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
-     }
 }
 
 
 SurveyOptionModel.init({
+
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
@@ -62,9 +59,9 @@ SurveyOptionModel.init({
 );
 
 
-SurveyOptionModel.associate();
 
-export default  SurveyOptionModel;
+
+export default SurveyOptionModel;
 
 
 

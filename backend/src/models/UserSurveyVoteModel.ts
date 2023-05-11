@@ -1,20 +1,12 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import User from "./UserModel";
+import UserModel from "./UserModel";
 import SurveyOptionModel from "./SurveyOptionModel";
 import SurveyModel from "./SurveyModel";
 
 
 
-class UserSurveyVoteModel extends Model {
-
-
-     public static associate(){
-          UserSurveyVoteModel.belongsTo(User, {foreignKey:"userId"});
-          UserSurveyVoteModel.belongsTo(SurveyOptionModel, {foreignKey:"surveyOptionId"});
-          UserSurveyVoteModel.belongsTo(SurveyModel, {foreignKey:"surveyId"});
-     }
-}
+class UserSurveyVoteModel extends Model {}
 
 
 UserSurveyVoteModel.init({
@@ -43,7 +35,31 @@ UserSurveyVoteModel.init({
    }
 );
 
-UserSurveyVoteModel.associate();
+UserModel.hasMany(UserSurveyVoteModel, {
+     foreignKey:"userId", 
+     as: "user_survey_vote",
+     onDelete: 'CASCADE',
+});
+
+UserSurveyVoteModel.belongsTo(UserModel, {
+     foreignKey:"userId", 
+     as: "user"
+});
+
+
+
+SurveyModel.hasMany(UserSurveyVoteModel, {
+     foreignKey:"surveyId", 
+     as:"user_survey_vote",
+     onDelete: 'CASCADE',
+});
+
+UserSurveyVoteModel.belongsTo(SurveyModel, {
+     foreignKey:"surveyId", 
+     as:"survey"
+});
+
+
 
 export default UserSurveyVoteModel;
 

@@ -6,6 +6,8 @@ import bcrypt from "bcryptjs";
 import { v4 as makeId }from 'uuid';
 import UserModel from "../models/UserModel";
 import {User} from "../classes/User";
+import SurveyOptionModel from '../models/SurveyOptionModel';
+import SurveyModel from '../models/SurveyModel';
 
 
 
@@ -111,6 +113,49 @@ class UserController {
      }
 
      public async deleteUser(req: Request, res:Response){
+          
+          try {
+               
+               const { id } = req.params;
+
+               const user = await UserModel.findByPk(id);
+               if(!user){
+                    return res.status(400).json({message: "Usuário não pode ser deletado."});
+               }
+
+               const surveys:any = await SurveyModel.findAll({
+                    where: {userId: id}
+               });
+
+               for(const survey of surveys){
+                    await SurveyOptionModel.destroy({
+                         where:{surveyId: survey.id}
+                    });
+
+                    await SurveyModel.destroy({
+                         where:{id: survey.id}
+                    })
+               }
+
+               const userId = await UserModel.destroy(({
+                    where:{id: id},
+                    cascade: true
+               }));
+
+               return res.status(200).json({message: `Usuário e id:${userId} deletado com sucesso.`});
+
+          } catch (error) {
+               
+               if(error instanceof ConnectionRefusedError){
+                    return res.status(500).json({error: true, message: "Sistema indisponível, tente novamente mais tarde!"})
+               }
+               if(error instanceof UniqueConstraintError){
+                    return res.status(400).json(error.parent.message);
+               }
+               if(error instanceof ValidationError){
+                    return res.status(400).json({error: true, message: `${error.errors[0].type} at ${error.errors[0].path}`})
+               }
+          }
 
      }
 

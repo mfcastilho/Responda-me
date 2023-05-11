@@ -1,19 +1,14 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
-import User from "./UserModel";
 import SurveyOption from "./SurveyOptionModel";
+import SurveyModel from "./SurveyModel";
 
 
-
-class SurveyResultWinnerModel extends Model {
-
-     public static associate(){
-          SurveyResultWinnerModel.belongsTo(SurveyOption, {foreignKey:"winnerSurveyOptionId"});
-     }
-}
+class SurveyResultWinnerModel extends Model {}
 
 
 SurveyResultWinnerModel.init({
+     
           id: {
                type: DataTypes.UUID,
                defaultValue: DataTypes.UUIDV4,
@@ -36,9 +31,19 @@ SurveyResultWinnerModel.init({
      }
 );
 
+SurveyModel.hasOne(SurveyResultWinnerModel, {
+     foreignKey:"winnerSurveyOptionId", 
+     as:"survey",
+     onDelete: 'CASCADE'
+});
 
-SurveyResultWinnerModel.associate();
+SurveyResultWinnerModel.belongsTo(SurveyOption, {
+     foreignKey:"winnerSurveyOptionId", 
+     as:"survey_result_winner"
+});
 
-export default  SurveyResultWinnerModel;
+
+
+export default SurveyResultWinnerModel;
 
 

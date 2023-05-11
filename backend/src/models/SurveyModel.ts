@@ -1,8 +1,7 @@
 import { Model, DataTypes, Sequelize, ModelStatic } from "sequelize";
 import { sequelize } from "../database/config/sequelize";
 import SurveyOptionModel from "./SurveyOptionModel";
-import UserModel from "./UserModel";
-import SurveyResultWinner from "./SurveyResultWinnerModel";
+
 
 
 class SurveyModel extends Model{
@@ -16,14 +15,7 @@ class SurveyModel extends Model{
           this.title = title;
           this.deadLine = deadline;
           this.userId = userId;
-     }
-
-     public static associate(){
-          SurveyModel.hasMany(SurveyOptionModel, {sourceKey:"id", foreignKey: "surveyId", as:"survey_option" , onDelete: "CASCADE"});
-          // SurveyOptionModel.belongsTo(SurveyModel, {foreignKey: "surveyId"});
-          SurveyModel.hasOne(SurveyResultWinner);
-          SurveyResultWinner.belongsTo(SurveyModel);
-     }
+     }     
 }
 
 SurveyModel.init({
@@ -56,7 +48,17 @@ SurveyModel.init({
      }
 );
 
-SurveyModel.associate();
+SurveyModel.hasMany(SurveyOptionModel, {
+     sourceKey:"id", 
+     foreignKey: "surveyId", 
+     as:"survey_option" , 
+     onDelete: "CASCADE"});
+     
+SurveyOptionModel.belongsTo(SurveyModel, {
+     foreignKey: "surveyId", 
+     as:"survey",
+     
+});
 
 
 export default SurveyModel;
