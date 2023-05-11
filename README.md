@@ -12,7 +12,7 @@ Bem-vindo ao Responda-me, um sistema de enquetes onde os usuários podem criar e
 
 ## Tecnologias utilizadas
 
-### Backend/API
+### Backend/API (Finalizado)
 
 - TypeScript: Linguagem de programação utilizada para o desenvolvimento do backend.
 - Node.js: Ambiente de execução JavaScript utilizado para o desenvolvimento do backend.
