@@ -1,4 +1,4 @@
-# Responda-me (em desenvolvimento)
+# Responda-me 
 
 Bem-vindo ao Responda-me, um sistema de enquetes onde os usuários podem criar e responder enquetes após se registrarem e fazerem login.
 
@@ -22,7 +22,7 @@ Bem-vindo ao Responda-me, um sistema de enquetes onde os usuários podem criar e
 - PostgreSQL: Banco de dados relacional utilizado para armazenar os dados do sistema.
 - JWT (JSON Web Token): Método de autenticação utilizado para verificar a identidade do usuário.
 
-### Frontend
+### Frontend(em desenvolvimento)
 
 - TypeScript: Linguagem de programação utilizada para o desenvolvimento do frontend.
 - React: Biblioteca JavaScript utilizada para a construção da interface do usuário.
