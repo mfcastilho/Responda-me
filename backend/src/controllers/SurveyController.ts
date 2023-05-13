@@ -347,7 +347,7 @@ export default class SurveyController{
 
 
 
-               return res.status(200).json({surveys: surveysAndRespectiveOptions});
+               return res.status(200).json({data: surveysAndRespectiveOptions});
           } catch (error) {
                
                if(error instanceof ConnectionRefusedError){
@@ -366,9 +366,11 @@ export default class SurveyController{
           
           try {
                const { surveyId } = req.params;
+               
                const { userId, surveyOptionId } = req.body;
 
                const survey = await SurveyModel.findByPk(surveyId);
+               
                if(!survey){
                     return res.status(404).json({error:"Enquete não existe."});
                }
@@ -390,6 +392,8 @@ export default class SurveyController{
                          surveyId:surveyId
                     }
                });
+
+               
 
                if(checkIfTheUserHasAlreadyVoted){
                     return res.status(400).json({message:"O usuário já votou na enquete."});

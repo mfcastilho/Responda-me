@@ -13,6 +13,7 @@ export class User{
      }
 
 
+
      /* -- Getters  -- */
 
      public getId():string{

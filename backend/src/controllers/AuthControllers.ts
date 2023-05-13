@@ -80,8 +80,10 @@ class AuthController {
                }
 
                const id = makeId();
-               const newUser = JSON.stringify(new User(id,name, email, hashPassword));
-               const userData = JSON.parse(newUser); 
+               const newUser = new User(id,name, email);
+               newUser.setPassword(password);
+
+               const userData = JSON.parse(JSON.stringify(newUser)); 
 
                await UserModel.create(userData);
           
