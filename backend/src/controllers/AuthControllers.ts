@@ -37,6 +37,8 @@ class AuthController {
                     res.status(401).json({message:"Email ou senha inválidos"});
                }
 
+               console.log(user);
+
                const verifyIfThePasswordIsCorrect = await bcrypt.compare(password, user.password);
 
                if(!verifyIfThePasswordIsCorrect){
@@ -78,10 +80,9 @@ class AuthController {
                if(verifyIfUserExists){
                     return res.status(404).json({message: "Usuário já se encontra cadastrdo"});
                }
-
                const id = makeId();
                const newUser = new User(id,name, email);
-               newUser.setPassword(password);
+               newUser.setPassword(hashPassword );
 
                const userData = JSON.parse(JSON.stringify(newUser)); 
 
