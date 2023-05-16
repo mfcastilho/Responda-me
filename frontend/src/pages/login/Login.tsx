@@ -9,11 +9,14 @@ function Login(){
 
      const [userInfos, setUserInfos] = useState<UserInfos>({email:"", password:""});
 
+     
      async function handleSubmit(e: React.SyntheticEvent){
           e.preventDefault();
           try {
+
+               
           
-               const response = await axios.post(`${baseURL}/login`);
+               const response = await axios.post(`${baseURL}/login`, userInfos);
                console.log(response.data);
           } catch (error) {
                console.log(error);
