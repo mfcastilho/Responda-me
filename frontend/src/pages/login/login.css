@@ -60,3 +60,12 @@
      background-color: #ff4800;
      cursor: pointer;
 }
+
+.login-form a{
+     margin: 0 auto;
+     font-size: 1.4rem;
+
+     margin-top: 1.6rem;
+
+     text-decoration: underline;
+}

@@ -11,6 +11,7 @@ function Login(){
                     <input type="email" placeholder="E-mail" />
                     <input type="password" placeholder="Senha" />
                     <button>Entrar</button>
+                    <a href="/cadastrar">Não tem conta? Cadastre-se</a>
                </form>
           </div>
      );
