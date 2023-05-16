@@ -1,0 +1,13 @@
+.home{
+     width: 100%;
+     max-width: 1280px;
+
+     margin: 0 auto;
+     padding: 0 5rem;
+}
+
+
+.home button{
+     width: 10%;
+     font-size: 1.6rem;
+}

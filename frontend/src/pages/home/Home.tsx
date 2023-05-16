@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import "./Home.css";
-import { Survey } from '../interfaces/Survey';
+import { Survey } from '../../interfaces/Survey';
 // import { SurveyOptions } from '../interfaces/SurveyOptions';
 
 
@@ -37,7 +37,7 @@ function Home(){
      return(
           <div className="home">
                {surveys.length > 0 && surveys.map((survey:Survey)=>(
-                    <div>
+                    <div className='surveys-container'>
                          <h2 key={survey.dataValues.id}>{survey.dataValues.title}</h2>
                          {survey.surveyOptions.map(option=>(
                               <p>{option.surveyAnswerOption}</p>
