@@ -5,10 +5,10 @@ import RoutesApp from './RoutsApp';
 function App() {
 
      return (
-          <body>
+          <div className="App">
                <Header/>
                <RoutesApp/>              
-          </body>
+          </div>
      )
 }
 
