@@ -28,3 +28,17 @@ header .login-user-icon{
      font-size: 3rem;
      color: #e9dada;;
 }
+
+.wrapper-header-right-infos{
+     display: flex;
+     align-items: center;
+     gap: 1rem;
+}
+
+.logged{
+     display: flex;
+     gap: 1rem;
+     align-items: center;
+
+     font-size: 1.4rem;
+}

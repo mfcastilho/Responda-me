@@ -1,14 +1,20 @@
 import "../App.css";
 import Header from './components/header';
 import RoutesApp from './RoutsApp';
+import { UserLoggedProvider } from "./components/userLoggedProvider/UserLoggedProvider";
 
 function App() {
 
+     const user:any = localStorage.getItem("userLoggedInfos")
+
      return (
-          <div className="App">
-               <Header/>
-               <RoutesApp/>              
-          </div>
+          <UserLoggedProvider>
+               <div className="App">
+                    <Header userLogged={user} />
+                    <RoutesApp/>              
+               </div>
+          </UserLoggedProvider>
+          
      )
 }
 

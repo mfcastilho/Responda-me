@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import "./login.css";
 import axios from "axios";
 import UserInfos from "../../interfaces/UserInfos";
+import { useNavigate } from "react-router-dom";
 
-const baseURL = "http://localhost:3000/api/v1"
+
+const baseURL = "http://localhost:3000/api/v1";
 
 function Login(){
 
      const [userInfos, setUserInfos] = useState<UserInfos>({email:"", password:""});
-
+     const navigate = useNavigate();
      
      async function handleSubmit(e: React.SyntheticEvent){
           e.preventDefault();
           try {
-
-               
-          
                const response = await axios.post(`${baseURL}/login`, userInfos);
-               console.log(response.data);
+               const {token, user} = response.data;
+               console.log(user);
+               localStorage.setItem("userLoggedToken", token);
+               localStorage.setItem("userLoggedInfos", user);
+               localStorage.setItem("userIsLogged", "true");
+               navigate("/");
+
           } catch (error) {
                console.log(error);
           }
