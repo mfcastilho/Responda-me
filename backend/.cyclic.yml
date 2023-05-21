@@ -1,9 +1,12 @@
-build:
-  steps:
-    - name: Install dependencies
-      run: npm install
-
 deploy:
-  steps:
-    - name: Start application
-      run: npm start
+  stages:
+    - name: Deploy backend
+      steps:
+        - name: Set up Node.js
+          uses: cyclicci/action-nodejs@v1
+
+        - name: Install dependencies
+          run: npm ci --prefix backend
+
+        - name: Start application
+          run: npm start --prefix backend
