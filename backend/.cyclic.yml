@@ -1,0 +1,9 @@
+build:
+  steps:
+    - name: Install dependencies
+      run: npm install
+
+deploy:
+  steps:
+    - name: Start application
+      run: npm start
